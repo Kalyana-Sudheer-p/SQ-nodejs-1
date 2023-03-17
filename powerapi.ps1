@@ -1,10 +1,10 @@
-$token = [System.Text.Encoding]::UTF8.GetBytes("squ_00cee7cb826eb3c74e1488e303cd221cd36c1048" + ":")
+$token = [System.Text.Encoding]::UTF8.GetBytes("sqa_caf595c25073636e28f81daa8e83eab5b72f9513" + ":")
 $base64 = [System.Convert]::ToBase64String($token)
  
 $basicAuth = [string]::Format("Basic {0}", $base64)
 $headers = @{ Authorization = $basicAuth }
  
-$result = Invoke-RestMethod -Method Get -Uri http://localhost:9000/api/qualitygates/project_status?projectKey=Sample_Test_Sample_Test_AYbk2tgYBLZgUKemSz15 -Headers $headers
+$result = Invoke-RestMethod -Method Get -Uri http://20.235.79.55:9000/api/qualitygates/project_status?projectKey=Demo-Project_Demo-Repo_AYbqyao38zymFYv_hZQG -Headers $headers
 $result | ConvertTo-Json | Write-Host
  
 if ($result.projectStatus.status -eq "OK") {
