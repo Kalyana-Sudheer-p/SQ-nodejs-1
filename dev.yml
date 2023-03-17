@@ -1,0 +1,61 @@
+trigger:
+- main
+- dev
+
+pool:
+  name: demo
+  demands: java
+steps:
+- task: NodeTool@0
+  displayName: 'Use Node 14.x'
+  inputs:
+    versionSpec: 14.x
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    workingDir: frontend
+    verbose: false
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    workingDir: backend
+    verbose: false
+
+- task: SonarQubePrepare@5
+  displayName: 'Prepare analysis on SonarQube'
+  inputs:
+    SonarQube: 'sonarqube-demo'
+    scannerMode: CLI
+    configMode: manual
+    cliProjectKey: 'Demo-Project_Demo-Repo_AYbqyao38zymFYv_hZQG'
+    cliProjectName: 'Demo-Project'
+    cliSources: frontend/src/App.js
+
+- task: SonarQubeAnalyze@5
+  displayName: 'Run Code Analysis'
+
+- task: SonarQubePublish@5
+  displayName: 'Publish Quality Gate Result'
+  inputs:
+    pollingTimeoutSec: 600
+    
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'front+backend'
+    publishLocation: 'Container'
+
+- task: PowerShell@2
+  displayName: 'Powershell Script'
+  inputs:
+    filePath: '/powerapi.ps1'
