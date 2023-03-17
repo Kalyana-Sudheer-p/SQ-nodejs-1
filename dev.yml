@@ -1,0 +1,53 @@
+pool:
+  name: demo
+steps:
+- task: NodeTool@0
+  displayName: 'Use Node 14.x'
+  inputs:
+    versionSpec: 14.x
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    workingDir: frontend
+    verbose: false
+
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    workingDir: backend
+    verbose: false
+
+
+
+pool:
+  name: demo
+  demands: java
+
+steps:
+- task: SonarSource.sonarqube.15B84CA1-B62F-4A2A-A403-89B77A063157.SonarQubePrepare@5
+  displayName: 'Prepare analysis on SonarQube'
+  inputs:
+    SonarQube: 'sonarqube-demo'
+    scannerMode: CLI
+    configMode: manual
+    cliProjectKey: 'Demo-Project_Demo-Repo_AYbqyao38zymFYv_hZQG'
+    cliProjectName: 'Demo-Project'
+    cliSources: frontend/src/App.js
+
+- task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@5
+  displayName: 'Run Code Analysis'
+
+- task: SonarSource.sonarqube.291ed61f-1ee4-45d3-b1b0-bf822d9095ef.SonarQubePublish@5
+  displayName: 'Publish Quality Gate Result'
+  inputs:
+    pollingTimeoutSec: 600
+
+steps:
+- task: PowerShell@2
+  displayName: 'PowerShell Script'
+  inputs:
+    targetType: filePath
+    filePath: ./powerapi.ps1
+
+
