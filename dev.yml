@@ -1,3 +1,7 @@
+trigger:
+- main
+- dev
+
 pool:
   name: demo
   demands: java
