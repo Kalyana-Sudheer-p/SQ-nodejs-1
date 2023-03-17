@@ -28,5 +28,10 @@ steps:
     verbose: false
 
 - script: |
+  workingDirectory: frontend
+    npm run build
+  displayName: 'npm install and build'
+- script: |
+  workingDirectory: backend
     npm run build
   displayName: 'npm install and build'
