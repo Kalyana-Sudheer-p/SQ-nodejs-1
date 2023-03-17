@@ -58,4 +58,4 @@ steps:
 - task: PowerShell@2
   displayName: 'Powershell Script'
   inputs:
-    filePath: '/powerapi.ps1'
+    filePath: '.\powerapi.ps1'
