@@ -18,3 +18,8 @@ steps:
     versionSource: 'spec'
     versionSpec: '14.x'
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop-demo-artofact'
+    publishLocation: 'Container'
